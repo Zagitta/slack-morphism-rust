@@ -269,9 +269,9 @@ pub struct SlackApiChatScheduleMessageResponse {
 #[skip_serializing_none]
 #[derive(Debug, PartialEq, Clone, Serialize, Deserialize, Builder)]
 pub struct SlackApiChatUnfurlRequest {
-    pub channel: SlackChannelId,
-    pub ts: SlackTs,
-    pub unfurls: HashMap<String, SlackApiChatUnfurlMapItem>,
+    pub unfurl_id: SlackUnfurlId,
+    pub source: String,
+    pub unfurls: HashMap<String, serde_json::Value>,
     pub user_auth_message: Option<String>,
     pub user_auth_required: Option<bool>,
     pub user_auth_url: Option<String>,
