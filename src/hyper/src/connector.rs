@@ -444,6 +444,36 @@ impl<H: 'static + Send + Sync + Clone + connect::Connect> SlackClientHttpConnect
         .boxed()
     }
 
+    fn http_post_with_client_secret<'a, RS>(
+        &'a self,
+        full_uri: Url,
+        client_id: &'a SlackClientId,
+        client_secret: &'a SlackClientSecret,
+    ) -> BoxFuture<'a, ClientResult<RS>>
+    where
+        RS: for<'de> serde::de::Deserialize<'de> + Send + 'a + 'a + Send,
+    {
+        async move {
+            self.send_rate_controlled_request(
+                || {
+                    Self::setup_basic_auth_header(
+                        Self::create_http_request(full_uri.clone(), hyper::http::Method::POST),
+                        client_id.value(),
+                        client_secret.value(),
+                    )
+                    .body(Body::empty())
+                    .map_err(Self::map_hyper_http_error)
+                },
+                None,
+                None,
+                None,
+                0,
+            )
+            .await
+        }
+        .boxed()
+    }
+
     fn http_post_uri<'a, RQ, RS>(
         &'a self,
         full_uri: Url,

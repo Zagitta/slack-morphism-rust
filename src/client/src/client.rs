@@ -61,6 +61,14 @@ pub trait SlackClientHttpConnector {
     ) -> BoxFuture<'a, ClientResult<RS>>
     where
         RS: for<'de> serde::de::Deserialize<'de> + Send + 'a + 'a + Send;
+    fn http_post_with_client_secret<'a, RS>(
+        &'a self,
+        full_uri: Url,
+        client_id: &'a SlackClientId,
+        client_secret: &'a SlackClientSecret,
+    ) -> BoxFuture<'a, ClientResult<RS>>
+    where
+        RS: for<'de> serde::de::Deserialize<'de> + Send + 'a + 'a + Send;
 
     fn http_get_token<'a, 'p, RS, PT, TS>(
         &'a self,

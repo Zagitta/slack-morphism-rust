@@ -32,7 +32,7 @@ where
 
         self.http_api
             .connector
-            .http_get_with_client_secret(full_uri, &req.client_id, &req.client_secret)
+            .http_post_with_client_secret(full_uri, &req.client_id, &req.client_secret)
             .await
     }
 }
